@@ -11,6 +11,16 @@
 !/modules/CMakeLists.txt
 !/modules/*.h
 !/modules/*.cmake
+# Vendored modules (tracked in this fork so a single pull carries them)
+!/modules/mod-ah-bot-plus
+/modules/mod-ah-bot-plus/tools/
+!/modules/mod-aoe-loot
+!/modules/mod-assistant
+!/modules/mod-autobalance
+!/modules/mod-individual-progression
+!/modules/mod-junk-to-gold
+!/modules/mod-talentbutton
+!/modules/mod-transmog
 /build*/
 /var/*
 !/var/build/.gitkeep
