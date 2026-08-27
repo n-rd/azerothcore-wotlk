@@ -2963,6 +2963,16 @@ Rate.RewardQuestMoney = 1
 Rate.RewardBonusMoney = 1
 
 #
+#    Rate.LFG.Reward.Money
+#        Description: Multiplier applied on top of the money granted by Dungeon Finder (LFG)
+#                     completion rewards, including the max-level bonus money. Money counterpart
+#                     of Rate.XP.Quest.DF. Adjustable at runtime with the .rate command
+#                     (lfg.money).
+#        Default:     1
+
+Rate.LFG.Reward.Money = 1
+
+#
 ###################################################################################################
 
 ###################################################################################################

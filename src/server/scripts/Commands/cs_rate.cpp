@@ -51,6 +51,8 @@ namespace
         { "itemdrop.artifact",   RATE_DROP_ITEM_ARTIFACT,         "Rate.Drop.Item.Artifact",        1.0f },
         { "itemdrop.referenced", RATE_DROP_ITEM_REFERENCED,       "Rate.Drop.Item.Referenced",      1.0f },
         { "gathering",           RATE_DROP_ITEM_GATHERING_AMOUNT, "Rate.Drop.Item.GatheringAmount", 1.0f },
+        { "lfg.xp",              RATE_XP_QUEST_DF,                "Rate.XP.Quest.DF",               1.0f },
+        { "lfg.money",           RATE_LFG_REWARD_MONEY,           "Rate.LFG.Reward.Money",          1.0f },
     };
 
     constexpr float MAX_RATE_VALUE = 10000.0f;
@@ -103,7 +105,7 @@ public:
         for (RateDefinition const& rate : ServerRates)
             handler->PSendSysMessage("|- {} = {:.2f}", rate.Name, sWorld->getRate(rate.Config));
 
-        handler->SendSysMessage("Groups: xp, itemdrop. Use .rate set $name $value and .rate reset $name (or all).");
+        handler->SendSysMessage("Groups: xp, itemdrop, lfg. Use .rate set $name $value and .rate reset $name|all.");
         return true;
     }
 

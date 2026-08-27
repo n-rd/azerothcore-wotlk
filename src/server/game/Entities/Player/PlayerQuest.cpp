@@ -779,6 +779,11 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, 
         moneyRew += rewOrReqMoney;
     }
 
+    // Dungeon Finder completion rewards scale with their own money rate (counterpart of Rate.XP.Quest.DF);
+    // clamped to the money cap so extreme rates cannot overflow the int32 conversion
+    if (isLFGReward && moneyRew > 0)
+        moneyRew = int32(std::min<double>(double(moneyRew) * sWorld->getRate(RATE_LFG_REWARD_MONEY), MAX_MONEY_AMOUNT));
+
     // CAIS reduces quest money, mirroring looted money and XP. Applied here as well as at the
     // turn-in gate because LFG and auto-complete quests reach RewardQuest without CanRewardQuest.
     if (moneyRew > 0)

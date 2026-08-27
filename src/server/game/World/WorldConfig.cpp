@@ -53,6 +53,7 @@ void WorldConfig::BuildConfigCache()
 
     SetConfigValue<float>(RATE_REWARD_QUEST_MONEY, "Rate.RewardQuestMoney", 1.0f);
     SetConfigValue<float>(RATE_REWARD_BONUS_MONEY, "Rate.RewardBonusMoney", 1.0f);
+    SetConfigValue<float>(RATE_LFG_REWARD_MONEY, "Rate.LFG.Reward.Money", 1.0f, ConfigValueCache::Reloadable::Yes, [](float const& value) { return value > 0.0f; }, "> 0");
     SetConfigValue<float>(RATE_XP_KILL, "Rate.XP.Kill", 1.0f);
     SetConfigValue<float>(RATE_XP_BG_KILL_AV, "Rate.XP.BattlegroundKillAV", 1.0f);
     SetConfigValue<float>(RATE_XP_BG_KILL_WSG, "Rate.XP.BattlegroundKillWSG", 1.0f);

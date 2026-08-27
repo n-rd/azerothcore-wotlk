@@ -21,6 +21,7 @@
 !/modules/mod-individual-progression
 !/modules/mod-junk-to-gold
 !/modules/mod-playerbots
+!/modules/mod-solo-lfg
 !/modules/mod-talentbutton
 !/modules/mod-transmog
 /build*/
