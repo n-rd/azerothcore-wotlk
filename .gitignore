@@ -17,8 +17,10 @@
 !/modules/mod-aoe-loot
 !/modules/mod-assistant
 !/modules/mod-autobalance
+!/modules/mod-dungeon-clear
 !/modules/mod-individual-progression
 !/modules/mod-junk-to-gold
+!/modules/mod-playerbots
 !/modules/mod-talentbutton
 !/modules/mod-transmog
 /build*/
