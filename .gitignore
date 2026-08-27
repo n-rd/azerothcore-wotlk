@@ -83,6 +83,8 @@ CLAUDE.local.md
 #
 /.settings/
 /.externalToolBuilders/*
+/.vs
+/out
 # exclude in all levels
 nbproject/
 .sync.ffs_db
@@ -135,3 +137,5 @@ __pycache__/
 #  !modules/yourmodule
 #
 # ==================
+.cache
+compile_commands.json
