@@ -55,6 +55,7 @@ void AddSC_player_commandscript();
 void AddSC_pool_commandscript();
 void AddSC_pooltools_commandscript();
 void AddSC_quest_commandscript();
+void AddSC_rate_commandscript();
 void AddSC_rbac_commandscript();
 void AddSC_reload_commandscript();
 void AddSC_reset_commandscript();
@@ -114,6 +115,7 @@ void AddCommandsScripts()
     AddSC_pool_commandscript();
     AddSC_pooltools_commandscript();
     AddSC_quest_commandscript();
+    AddSC_rate_commandscript();
     AddSC_rbac_commandscript();
     AddSC_reload_commandscript();
     AddSC_reset_commandscript();

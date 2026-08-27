@@ -8036,6 +8036,9 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type)
             {
                 loot->clear();
 
+                if (go->IsGatheringNode())
+                    loot->itemAmountMultiplier = sWorld->getRate(RATE_DROP_ITEM_GATHERING_AMOUNT);
+
                 Group* group = GetGroup();
                 bool groupRules = (group && go->GetGOInfo()->type == GAMEOBJECT_TYPE_CHEST && go->GetGOInfo()->chest.groupLootRules);
 
@@ -8282,6 +8285,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type)
             else if (loot_type == LOOT_SKINNING)
             {
                 loot->clear();
+                loot->itemAmountMultiplier = sWorld->getRate(RATE_DROP_ITEM_GATHERING_AMOUNT);
                 loot->FillLoot(creature->GetCreatureTemplate()->SkinLootId, LootTemplates_Skinning, this, true);
                 permission = OWNER_PERMISSION;
 

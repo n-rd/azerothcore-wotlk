@@ -2858,6 +2858,15 @@ Rate.Drop.Item.ReferencedAmount = 1
 Rate.Drop.Item.GroupAmount = 1
 
 #
+#    Rate.Drop.Item.GatheringAmount
+#        Description: Multiplier for the amount of materials gathered from herbalism and
+#                     mining nodes and from skinning. Quest items are not affected.
+#                     Values below 1 reduce the yield but never below 1 item per drop.
+#        Default:     1
+
+Rate.Drop.Item.GatheringAmount = 1
+
+#
 #    LootNeedBeforeGreedILvlRestriction
 #        Description: Specify level restriction for items below player's subclass in Need Before Greed loot mode in DF groups
 #        Default:     70

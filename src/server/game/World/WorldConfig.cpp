@@ -48,6 +48,7 @@ void WorldConfig::BuildConfigCache()
     SetConfigValue<float>(RATE_DROP_ITEM_REFERENCED, "Rate.Drop.Item.Referenced", 1.0f);
     SetConfigValue<float>(RATE_DROP_ITEM_REFERENCED_AMOUNT, "Rate.Drop.Item.ReferencedAmount", 1.0f);
     SetConfigValue<float>(RATE_DROP_ITEM_GROUP_AMOUNT, "Rate.Drop.Item.GroupAmount", 1.0f);
+    SetConfigValue<float>(RATE_DROP_ITEM_GATHERING_AMOUNT, "Rate.Drop.Item.GatheringAmount", 1.0f, ConfigValueCache::Reloadable::Yes, [](float const& value) { return value > 0.0f; }, "> 0");
     SetConfigValue<float>(RATE_DROP_MONEY, "Rate.Drop.Money", 1.0f);
 
     SetConfigValue<float>(RATE_REWARD_QUEST_MONEY, "Rate.RewardQuestMoney", 1.0f);

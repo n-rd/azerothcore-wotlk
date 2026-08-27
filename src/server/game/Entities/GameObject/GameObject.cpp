@@ -3032,6 +3032,29 @@ bool GameObject::IsWithinDistInMap(Player const* player) const
     return IsInMap(player) && InSamePhase(player) && IsAtInteractDistance(player);
 }
 
+bool GameObject::IsGatheringNode() const
+{
+    uint32 lockId = GetGOInfo()->GetLockId();
+    if (!lockId)
+        return false;
+
+    LockEntry const* lock = sLockStore.LookupEntry(lockId);
+    if (!lock)
+        return false;
+
+    for (uint8 i = 0; i < MAX_LOCK_CASE; ++i)
+    {
+        if (lock->Type[i] != LOCK_KEY_SKILL)
+            continue;
+
+        SkillType skill = SkillByLockType(LockType(lock->Index[i]));
+        if (skill == SKILL_HERBALISM || skill == SKILL_MINING)
+            return true;
+    }
+
+    return false;
+}
+
 SpellInfo const* GameObject::GetSpellForLock(Player const* player) const
 {
     if (!player)

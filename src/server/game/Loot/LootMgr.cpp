@@ -485,6 +485,9 @@ void Loot::AddItem(LootStoreItem const& item)
         return;
 
     uint32 count = urand(item.mincount, item.maxcount);
+    if (!item.needs_quest && itemAmountMultiplier != 1.0f)
+        count = std::max<uint32>(1, uint32(count * itemAmountMultiplier + 0.5f));
+
     uint32 stacks = count / proto->GetMaxStackSize() + (count % proto->GetMaxStackSize() ? 1 : 0);
 
     std::vector<LootItem>& lootItems = item.needs_quest ? quest_items : items;

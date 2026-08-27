@@ -343,6 +343,7 @@ public:
     [[nodiscard]] bool IsWithinDistInMap(Player const* player) const;
     using WorldObject::IsWithinDistInMap;
 
+    [[nodiscard]] bool IsGatheringNode() const;
     [[nodiscard]] SpellInfo const* GetSpellForLock(Player const* player) const;
 
     static std::unordered_map<int, goEventFlag> gameObjectToEventFlag; // Gameobject -> event flag

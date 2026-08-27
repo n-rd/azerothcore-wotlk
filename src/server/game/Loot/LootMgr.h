@@ -330,6 +330,9 @@ struct Loot
     ObjectGuid sourceWorldObjectGUID;
     GameObject* sourceGameObject{nullptr};
 
+    // Multiplies the generated count of non-quest items; must be set before FillLoot (gathering yield rate)
+    float itemAmountMultiplier{1.0f};
+
     Loot(uint32 _gold = 0) : gold(_gold) { }
     ~Loot() { clear(); }
 
@@ -362,6 +365,7 @@ struct Loot
         roundRobinPlayer.Clear();
         i_LootValidatorRefMgr.clearReferences();
         loot_type = LOOT_NONE;
+        itemAmountMultiplier = 1.0f;
     }
 
     [[nodiscard]] bool empty() const { return items.empty() && gold == 0; }
