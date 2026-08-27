@@ -29,6 +29,9 @@ target_link_libraries(
         gtest_main
         gmock_main
         game-interface
+        # acore-core-interface carries the MSVC-critical compile options
+        # (/utf-8, NOMINMAX); game links it PRIVATE, so link it directly
+        acore-core-interface
 )
 
 # Add module test sources if any modules registered tests
@@ -55,5 +58,5 @@ add_test(
         NAME
         unit
         COMMAND
-        ${CMAKE_BINARY_DIR}/src/test/unit_tests
+        $<TARGET_FILE:unit_tests>
 )
