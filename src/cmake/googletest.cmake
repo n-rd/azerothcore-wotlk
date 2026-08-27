@@ -24,6 +24,10 @@ macro(fetch_googletest _download_module_path _download_root)
             ${_download_root}
     )
 
+    # match the parent project's dynamic CRT (/MD) on MSVC; gtest defaults
+    # to the static runtime and the mixed CRTs fail to link (LNK2038)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
     # adds the targers: gtest, gtest_main, gmock, gmock_main
     add_subdirectory(
             ${_download_root}/googletest-src
