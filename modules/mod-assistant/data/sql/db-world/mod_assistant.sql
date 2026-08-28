@@ -140,6 +140,22 @@ INSERT INTO `npc_vendor` (`entry`, `item`) VALUES
 (@Entry+1, 48689), -- Stained Shadowcraft Tunic
 (@Entry+1, 48691), -- Tattered Dreadmist Robe
 (@Entry+1, 50255), -- Dread Pirate Ring
+(@Entry+1, 100100), -- Tattered Dreadmist Mask
+(@Entry+1, 100101), -- Stained Shadowcraft Cap
+(@Entry+1, 100102), -- Preened Ironfeather Bonnet
+(@Entry+1, 100103), -- Mystical Coif of Elements
+(@Entry+1, 100104), -- Prized Beastmaster's Cap
+(@Entry+1, 100105), -- Polished Helm of Valor
+(@Entry+1, 100106), -- Tattered Dreadmist Leggings
+(@Entry+1, 100107), -- Stained Shadowcraft Pants
+(@Entry+1, 100108), -- Preened Ironfeather Britches
+(@Entry+1, 100109), -- Mystical Kilt of Elements
+(@Entry+1, 100110), -- Prized Beastmaster's Pants
+(@Entry+1, 100111), -- Polished Legplates of Valor
+(@Entry+1, 100112), -- Inherited Cape of the Black Baron
+(@Entry+1, 100113), -- Ancient Bloodmoon Cloak
+(@Entry+1, 100114), -- Ancient Spellweave Cloak
+(@Entry+1, 100115), -- Worn Stoneskin Gargoyle Cape
 -- Heirloom: Other
 (@Entry+2, 49177), -- Tome of Cold Weather Flight
 -- Glyph: Warrior (Major)
