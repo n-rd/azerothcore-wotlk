@@ -355,24 +355,27 @@ void Assistant::SetFullProfessionTraining(Player* player)
     if (!player->HasEnoughMoney(FullTrainingProfessionCost))
         return;
 
-    // Mirrors HandleLearnAllCraftsCommand/HandleLearnSkillRecipesHelper (cs_learn.cpp):
-    // the rank spells teach the profession itself through Grand Master, the ability
-    // loop teaches every recipe valid for the player's class and race.
+    // Mirrors HandleLearnSkillRecipesHelper (cs_learn.cpp): the rank spells teach
+    // the profession itself through Grand Master, the ability loop teaches every
+    // recipe valid for the player's class and race. Iterates an explicit skill
+    // list rather than SkillLine.dbc categories: the canLink flag the core command
+    // filters on is unset for the gathering professions (Mining, Herbalism,
+    // Fishing, Skinning), and dropping it would drag in Riding and racial lines.
+    constexpr uint32 professionSkills[] =
+    {
+        SKILL_FIRST_AID, SKILL_BLACKSMITHING, SKILL_LEATHERWORKING, SKILL_ALCHEMY, SKILL_HERBALISM,
+        SKILL_COOKING, SKILL_MINING, SKILL_TAILORING, SKILL_ENGINEERING, SKILL_ENCHANTING,
+        SKILL_FISHING, SKILL_SKINNING, SKILL_INSCRIPTION, SKILL_JEWELCRAFTING
+    };
+
     uint32 classmask = player->getClassMask();
 
-    for (uint32 i = 0; i < sSkillLineStore.GetNumRows(); ++i)
+    for (uint32 skillId : professionSkills)
     {
-        SkillLineEntry const* skillInfo = sSkillLineStore.LookupEntry(i);
-        if (!skillInfo)
-            continue;
-
-        if ((skillInfo->categoryId != SKILL_CATEGORY_PROFESSION && skillInfo->categoryId != SKILL_CATEGORY_SECONDARY) || !skillInfo->canLink)
-            continue;
-
-        for (uint32 rankSpell : sSpellMgr->GetSkillRankSpells(skillInfo->id))
+        for (uint32 rankSpell : sSpellMgr->GetSkillRankSpells(skillId))
             player->learnSpell(rankSpell);
 
-        for (SkillLineAbilityEntry const* skillLine : GetSkillLineAbilitiesBySkillLine(skillInfo->id))
+        for (SkillLineAbilityEntry const* skillLine : GetSkillLineAbilitiesBySkillLine(skillId))
         {
             if (skillLine->SupercededBySpell)
                 continue;
@@ -390,8 +393,8 @@ void Assistant::SetFullProfessionTraining(Player* player)
             player->learnSpell(skillLine->Spell);
         }
 
-        uint16 maxSkillValue = player->GetPureMaxSkillValue(skillInfo->id);
-        player->SetSkill(skillInfo->id, player->GetSkillStep(skillInfo->id), maxSkillValue, maxSkillValue);
+        uint16 maxSkillValue = player->GetPureMaxSkillValue(skillId);
+        player->SetSkill(skillId, player->GetSkillStep(skillId), maxSkillValue, maxSkillValue);
     }
 
     player->ModifyMoney(-static_cast<int32>(FullTrainingProfessionCost));
