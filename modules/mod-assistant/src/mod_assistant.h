@@ -110,6 +110,7 @@ enum
 
 #define GOSSIP_PROFESSIONS "I want help with my professions"
 #define GOSSIP_PROFESSIONS_CHOOSE "I want help with my skill in"
+#define GOSSIP_PROFESSIONS_FULL_TRAINING "Train me in every profession, including all recipes"
 #define GOSSIP_PROFESSIONS_FIRST_AID "First Aid"
 #define GOSSIP_PROFESSIONS_BLACKSMITHING "Blacksmithing"
 #define GOSSIP_PROFESSIONS_LEATHERWORKING "Leatherworking"
@@ -194,9 +195,12 @@ private:
     uint32 MasterProfessionCost;
     bool GrandMasterProfessionEnabled;
     uint32 GrandMasterProfessionCost;
+    bool FullTrainingProfessionEnabled;
+    uint32 FullTrainingProfessionCost;
 
     void ListProfession(Player* /*player*/, uint32 /*id*/);
     void SetProfession(Player* /*player*/, uint32 /*id*/);
+    void SetFullProfessionTraining(Player* /*player*/);
     bool HasValidProfession(Player* /*player*/);
     bool IsValidProfession(Player* /*player*/, uint32 /*id*/);
     uint32 GetProfessionCost(Player* /*player*/, uint32 /*id*/);

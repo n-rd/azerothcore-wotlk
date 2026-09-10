@@ -1,4 +1,7 @@
 #include "mod_assistant.h"
+#include "DBCStores.h"
+#include "SpellInfo.h"
+#include "SpellMgr.h"
 
 uint32 Assistant::GetGlyphId(uint32 id, bool major)
 {
@@ -345,6 +348,53 @@ void Assistant::SetProfession(Player* player, uint32 id)
     uint32 cost = GetProfessionCost(player, id);
     player->SetSkill(id, 0, maxSkillValue, maxSkillValue);
     player->ModifyMoney(-cost);
+}
+
+void Assistant::SetFullProfessionTraining(Player* player)
+{
+    if (!player->HasEnoughMoney(FullTrainingProfessionCost))
+        return;
+
+    // Mirrors HandleLearnAllCraftsCommand/HandleLearnSkillRecipesHelper (cs_learn.cpp):
+    // the rank spells teach the profession itself through Grand Master, the ability
+    // loop teaches every recipe valid for the player's class and race.
+    uint32 classmask = player->getClassMask();
+
+    for (uint32 i = 0; i < sSkillLineStore.GetNumRows(); ++i)
+    {
+        SkillLineEntry const* skillInfo = sSkillLineStore.LookupEntry(i);
+        if (!skillInfo)
+            continue;
+
+        if ((skillInfo->categoryId != SKILL_CATEGORY_PROFESSION && skillInfo->categoryId != SKILL_CATEGORY_SECONDARY) || !skillInfo->canLink)
+            continue;
+
+        for (uint32 rankSpell : sSpellMgr->GetSkillRankSpells(skillInfo->id))
+            player->learnSpell(rankSpell);
+
+        for (SkillLineAbilityEntry const* skillLine : GetSkillLineAbilitiesBySkillLine(skillInfo->id))
+        {
+            if (skillLine->SupercededBySpell)
+                continue;
+
+            if (skillLine->RaceMask != 0)
+                continue;
+
+            if (skillLine->ClassMask && (skillLine->ClassMask & classmask) == 0)
+                continue;
+
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(skillLine->Spell);
+            if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo))
+                continue;
+
+            player->learnSpell(skillLine->Spell);
+        }
+
+        uint16 maxSkillValue = player->GetPureMaxSkillValue(skillInfo->id);
+        player->SetSkill(skillInfo->id, player->GetSkillStep(skillInfo->id), maxSkillValue, maxSkillValue);
+    }
+
+    player->ModifyMoney(-static_cast<int32>(FullTrainingProfessionCost));
 }
 
 bool Assistant::HasValidProfession(Player* player)

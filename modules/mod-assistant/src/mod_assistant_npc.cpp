@@ -49,7 +49,7 @@ bool Assistant::OnGossipHello(Player* player, Creature* creature)
         AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_FLIGHT_PATHS, GOSSIP_SENDER_MAIN, ASSISTANT_GOSSIP_FLIGHT_PATHS);
     }
 
-    if (HasValidProfession(player))
+    if (HasValidProfession(player) || FullTrainingProfessionEnabled)
     {
         AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_PROFESSIONS, GOSSIP_SENDER_MAIN, ASSISTANT_GOSSIP_PROFESSIONS);
     }
@@ -388,6 +388,12 @@ bool Assistant::OnGossipSelect(Player* player, Creature* creature, uint32 sender
         ListProfession(player, SKILL_SKINNING);
         ListProfession(player, SKILL_INSCRIPTION);
         ListProfession(player, SKILL_JEWELCRAFTING);
+
+        if (FullTrainingProfessionEnabled)
+        {
+            AddGossipItemFor(player, GOSSIP_ICON_TRAINER, GOSSIP_PROFESSIONS_FULL_TRAINING, GOSSIP_SENDER_MAIN, ASSISTANT_GOSSIP_PROFESSIONS + 15, GOSSIP_CONTINUE_TRANSACTION, FullTrainingProfessionCost, false);
+        }
+
         AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_PREVIOUS_PAGE, GOSSIP_SENDER_MAIN, 1);
         SendGossipMenuFor(player, ASSISTANT_GOSSIP_TEXT, creature->GetGUID());
     }
@@ -444,6 +450,12 @@ bool Assistant::OnGossipSelect(Player* player, Creature* creature, uint32 sender
         }
 
         SetProfession(player, skill);
+        OnGossipSelect(player, creature, GOSSIP_SENDER_MAIN, 1);
+    }
+    else if (action == ASSISTANT_GOSSIP_PROFESSIONS + 15)
+    {
+        ClearGossipMenuFor(player);
+        SetFullProfessionTraining(player);
         OnGossipSelect(player, creature, GOSSIP_SENDER_MAIN, 1);
     }
     else if (action == ASSISTANT_GOSSIP_INSTANCES)
