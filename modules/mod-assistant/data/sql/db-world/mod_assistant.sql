@@ -156,6 +156,7 @@ INSERT INTO `npc_vendor` (`entry`, `item`) VALUES
 (@Entry+1, 100113), -- Ancient Bloodmoon Cloak
 (@Entry+1, 100114), -- Ancient Spellweave Cloak
 (@Entry+1, 100115), -- Worn Stoneskin Gargoyle Cape
+(@Entry+1, 100116), -- Rocketeer's Charge
 -- Heirloom: Other
 (@Entry+2, 49177), -- Tome of Cold Weather Flight
 -- Glyph: Warrior (Major)
