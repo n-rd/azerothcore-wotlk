@@ -57,6 +57,7 @@ public:
     enum class SkipReason : uint8
     {
         NotInWorld = 0,
+        Bot,                // playerbot session (SkipBots)
         OptedOut,
         Level,
         Dungeon,
@@ -307,6 +308,7 @@ private:
     uint32 _warningLeadMs = 60u * 1000u;
     bool _crossFaction = true;
     bool _cfbgEnabled = false;     // mirrored CFBG.Enable; selects which queue buckets the matcher reads
+    bool _skipBots = true;
     bool _skipGameMasters = true;
     bool _skipAfk = true;
     std::vector<uint32> _skipAuras; // aura ids that exclude a player from a pass

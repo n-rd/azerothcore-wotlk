@@ -172,6 +172,20 @@ BgAutoQueue.SkipGameMasters = 1
 BgAutoQueue.SkipAFK = 1
 
 #
+#    BgAutoQueue.SkipBots
+#        Description: Skip playerbot characters (sessions the core flags as
+#                     bots) in both the warning and the queueing. With
+#                     mod-playerbots, bots queue themselves to fill the
+#                     brackets real players join (AiPlayerbot.RandomBotJoinBG),
+#                     so passes only need to seed real players. Disabling this
+#                     queues every eligible bot on each pass.
+#        Default:     1 - Skip bots
+#                     0 - Include bots
+#
+
+BgAutoQueue.SkipBots = 1
+
+#
 #    BgAutoQueue.SkipAuras
 #        Description: Comma-separated list of aura (spell) IDs. A player who has
 #                     any of these auras is skipped for the pass, in both the

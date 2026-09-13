@@ -149,6 +149,7 @@ void BgAutoQueue::LoadConfig()
 
     _skipGameMasters  = sConfigMgr->GetOption<bool>("BgAutoQueue.SkipGameMasters", true);
     _skipAfk          = sConfigMgr->GetOption<bool>("BgAutoQueue.SkipAFK", true);
+    _skipBots         = sConfigMgr->GetOption<bool>("BgAutoQueue.SkipBots", true);
     _broadcastMessage = sConfigMgr->GetOption<std::string>("BgAutoQueue.BroadcastMessage", BG_AUTO_QUEUE_DEFAULT_BROADCAST);
 
     _declineHintEnabled  = sConfigMgr->GetOption<bool>("BgAutoQueue.DeclineHint.Enable", true);
@@ -279,6 +280,7 @@ char const* BgAutoQueue::GetSkipReasonLabel(SkipReason reason)
     switch (reason)
     {
         case SkipReason::NotInWorld:          return "not in world";
+        case SkipReason::Bot:                 return "playerbot";
         case SkipReason::OptedOut:            return "opted out (.bgevents off)";
         case SkipReason::Level:               return "level outside configured range";
         case SkipReason::Dungeon:             return "in a dungeon/raid";
@@ -308,6 +310,13 @@ bool BgAutoQueue::IsEligible(Player* player, SkipReason* reason) const
         return fail(SkipReason::NotInWorld);
 
     std::string const& name = player->GetName();
+
+    // Before IsOptedOut: GetPlayerSetting lazily creates a settings entry, which
+    // would otherwise be persisted for every bot character on each pass.
+    // Playerbots queue themselves (AiPlayerbot.RandomBotJoinBG) to fill brackets
+    // that real players join, so the pass only needs to seed real players.
+    if (_skipBots && player->GetSession() && player->GetSession()->IsBot())
+        return fail(SkipReason::Bot);
 
     if (IsOptedOut(player))
     {
