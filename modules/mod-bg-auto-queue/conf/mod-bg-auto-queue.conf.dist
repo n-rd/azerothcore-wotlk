@@ -1,0 +1,219 @@
+#
+# Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://www.gnu.org/licenses/agpl-3.0.txt
+#
+
+[worldserver]
+
+###################################################################################################
+# mod-bg-auto-queue
+#
+#    DEPENDENCY: per-character ".bgevents" opt-out and the consecutive-decline
+#    counter (see OptOutAfterDeclines) are stored via the core PlayerSettings
+#    system, which only persists across logins when the core config
+#    "EnablePlayerSettings" is set to 1. With it 0 (the core default),
+#    ".bgevents off" still works but lasts only for the current session, and a
+#    warning is logged at startup. This module does not change the core config.
+#
+#    NOTE: when no pool candidate can reach its minimum player count for a
+#    bracket, the pass still queues the bracket into the smallest battleground
+#    to seed it. Until that queue pops (or the player leaves it), the core
+#    blocks Random Battleground joins, and with "JoinBGAndLFG.Enable = 0" (the
+#    core default) it also blocks joining the Dungeon Finder. Realms where
+#    below-minimum brackets are common should consider "JoinBGAndLFG.Enable=1"
+#    so seeded players keep Dungeon Finder access.
+#
+#    BgAutoQueue.Enable
+#        Description: Enable the automatic, periodic battleground queue pass.
+#                     When enabled, the module periodically gathers eligible
+#                     online players, groups them by level bracket and queues
+#                     each bracket into a battleground.
+#                     NOTE: This gates ONLY the automatic schedule: even when
+#                     disabled, a GM can still fire a pass on
+#                     demand with ".bgevents run".
+#        Default:     1 - Enabled
+#                     0 - Disabled (manual ".bgevents run" only)
+#
+
+BgAutoQueue.Enable = 1
+
+#
+#    BgAutoQueue.Level.Min
+#        Description: Minimum character level eligible for the automatic queue.
+#                     Players below this level are skipped.
+#        Default:     10
+#
+
+BgAutoQueue.Level.Min = 10
+
+#
+#    BgAutoQueue.Level.Max
+#        Description: Maximum character level eligible for the automatic queue.
+#                     Players above this level are skipped.
+#                     On sub-max brackets, batch viability follows the core
+#                     Battleground.Override.LowLevels.MinPlayers override when
+#                     set. A max-level bracket (reachable only with
+#                     Level.Max = 80) keeps the raw template minimums,
+#                     matching core.
+#        Default:     79
+#
+
+BgAutoQueue.Level.Max = 79
+
+#
+#    BgAutoQueue.Pool
+#        Description: Comma-separated list of battleground_template IDs the
+#                     module may randomly pick from for each bracket. The IDs
+#                     are BattlegroundTypeId values:
+#                         1  = Alterac Valley
+#                         2  = Warsong Gulch
+#                         3  = Arathi Basin
+#                         7  = Eye of the Storm
+#                         9  = Strand of the Ancients
+#                         30 = Isle of Conquest
+#                     Non-numeric entries and Random Battleground (32) are
+#                     rejected at load with a warning; unknown IDs, arenas and
+#                     battlegrounds disabled via the `disables` table are
+#                     reported with a warning at the first pass after each
+#                     (re)load. If the pool ends up empty, only
+#                     live-battleground reinforcement can queue players.
+#        Default:     "2,3,7" - Warsong Gulch, Arathi Basin, Eye of the Storm
+#
+
+BgAutoQueue.Pool = "2,3,7"
+
+#
+#    BgAutoQueue.Interval
+#        Description: Minutes between automatic queue passes. Set to 0 to
+#                     disable the periodic pass entirely (".bgevents run" still
+#                     works).
+#        Default:     45
+#
+
+BgAutoQueue.Interval = 45
+
+#
+#    BgAutoQueue.InitialDelay
+#        Description: Seconds before the FIRST pass after startup or a config
+#                     reload. 0 means wait one full Interval before the first
+#                     pass. A small value (e.g. 30) fires the first event
+#                     quickly on a test server.
+#        Default:     0
+#
+
+BgAutoQueue.InitialDelay = 0
+
+#
+#    BgAutoQueue.WarningLeadTime
+#        Description: Seconds before each pass to broadcast the warning message.
+#                     Must be smaller than the Interval (and than InitialDelay
+#                     for the first pass) to fire. Set BroadcastMessage to an
+#                     empty string to disable the warning.
+#        Default:     60
+#
+
+BgAutoQueue.WarningLeadTime = 60
+
+#
+#    BgAutoQueue.BroadcastMessage
+#        Description: System message sent to every eligible online player
+#                     WarningLeadTime seconds before a pass. It should remind
+#                     players of both ".bgevents off" (opt out) and
+#                     ".bgevents on" (opt back in). An empty string disables
+#                     the warning.
+#        Default:     "A Battleground event is starting shortly. Type .bgevents off to opt out, or .bgevents on to opt back in. You can also join manually by pressing H."
+#
+
+BgAutoQueue.BroadcastMessage = "A Battleground event is starting shortly. Type .bgevents off to opt out, or .bgevents on to opt back in. You can also join manually by pressing H."
+
+#
+#    BgAutoQueue.CrossFaction
+#        Description: How the available player count is judged against a
+#                     battleground's minimum players per team when several
+#                     pool candidates exist.
+#                     Mode 1 assumes a cross-faction matcher (such as
+#                     mod-cfbg) is installed and active. On a stock core the
+#                     queue itself still requires the minimum in EACH
+#                     faction, so mode 1 can queue faction-lopsided batches
+#                     that never pop; players stay queued until enough
+#                     minority-faction players appear. Without a
+#                     cross-faction matcher, set this to 0. With mod-cfbg
+#                     active (CFBG.Enable = 1) keep this at 1: mod-cfbg fills
+#                     both teams from the total, so per-faction viability
+#                     under-queues (a warning is logged on this combination).
+#        Default:     1 - Cross-faction: total players >= 2 x MinPlayersPerTeam
+#                         (requires a cross-faction matcher such as mod-cfbg)
+#                     0 - Vanilla: Alliance >= min AND Horde >= min
+#
+
+BgAutoQueue.CrossFaction = 1
+
+#
+#    BgAutoQueue.SkipGameMasters
+#        Description: Skip game masters in both the warning and the queueing.
+#                     Set to 0 on a test server to allow queueing a GM.
+#        Default:     1 - Skip GMs
+#                     0 - Include GMs
+#
+
+BgAutoQueue.SkipGameMasters = 1
+
+#
+#    BgAutoQueue.SkipAFK
+#        Description: Skip players flagged as AFK in both the warning and the
+#                     queueing, so idle characters do not receive queue invites
+#                     they will never answer. (Nobody is ever teleported
+#                     automatically: entering always requires the player to
+#                     click "Enter Battle".) Note that the client flags idle
+#                     players AFK automatically after a few minutes.
+#        Default:     1 - Skip AFK players
+#                     0 - Include AFK players
+#
+
+BgAutoQueue.SkipAFK = 1
+
+#
+#    BgAutoQueue.SkipAuras
+#        Description: Comma-separated list of aura (spell) IDs. A player who has
+#                     any of these auras is skipped for the pass, in both the
+#                     warning and the queueing. Useful to let other systems flag
+#                     a character as temporarily exempt from auto-queue. Invalid
+#                     entries are rejected at load with a warning.
+#                     Example: "2000100, 2000101, 2000102" skips any player who
+#                     has aura 2000100, 2000101 or 2000102.
+#        Default:     "" - empty, the aura check is disabled
+#
+
+BgAutoQueue.SkipAuras = ""
+
+#
+#    BgAutoQueue.DeclineHint.Enable
+#        Description: When a player declines (or lets expire) a Battleground
+#                     invite created by this module, send them a visible chat
+#                     hint explaining ".bgevents off". Gates ONLY the
+#                     per-decline hint; the automatic opt-out notice (see
+#                     OptOutAfterDeclines) is always sent. Manual queues are
+#                     never affected.
+#        Default:     1 - Send the hint
+#                     0 - No hint
+#
+
+BgAutoQueue.DeclineHint.Enable = 1
+
+#
+#    BgAutoQueue.OptOutAfterDeclines
+#        Description: After this many CONSECUTIVE declined or ignored module
+#                     invites, the character is automatically opted out (as if
+#                     they typed ".bgevents off") and told so. Accepting a
+#                     module invite or typing ".bgevents on" resets the count.
+#                     The count is stored via the core PlayerSettings system,
+#                     so it persists across logins only with
+#                     "EnablePlayerSettings = 1" (same dependency as the
+#                     opt-out itself, see the note at the top of this file).
+#        Default:     3
+#                     0 - Never opt out automatically (hints alone keep firing
+#                         if enabled)
+#
+
+BgAutoQueue.OptOutAfterDeclines = 3
+
+###################################################################################################
